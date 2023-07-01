@@ -1,0 +1,1 @@
+Solution du kata : https://github.com/arolla/choreography-kata
