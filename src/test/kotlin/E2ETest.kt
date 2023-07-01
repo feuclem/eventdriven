@@ -4,10 +4,14 @@ import kotlin.test.assertFalse
 
 class E2ETest {
 
-    private val bookingService = BookingService(
+    private val orchestratorService = OrchestratorService(
         inventoryService = InventoryService(),
         ticketingService = TicketingService(),
         notificationService = NotificationService(),
+    )
+
+    private val bookingService = BookingService(
+        orchestratorService = orchestratorService,
     )
 
     @Test
