@@ -1,30 +1,28 @@
+import bus.MessageBus
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import kotlin.test.assertFalse
+import kotlin.test.assertEquals
 
 class E2ETest {
 
-    private val orchestratorService = OrchestratorService(
-        inventoryService = InventoryService(),
-        ticketingService = TicketingService(),
-        notificationService = NotificationService(),
-    )
+    private val messageBus = MessageBus()
 
-    private val bookingService = BookingService(
-        orchestratorService = orchestratorService,
-    )
+    private val bookingService = BookingService(messageBus = messageBus)
+    private val inventoryService = InventoryService(messageBus = messageBus)
+    private val notificationService = NotificationService(messageBus = messageBus)
+    private val ticketingService = TicketingService(messageBus = messageBus)
 
     @Test
     fun `requested successful`() {
-        val result = bookingService.book(99)
+        bookingService.book(99)
 
-        assertTrue(result)
+        assertEquals(inventoryService.totalAvailableSeats, 1)
     }
 
     @Test
     fun `not enough seats remaining`() {
-        val result = bookingService.book(101)
+        bookingService.book(101)
 
-        assertFalse(result)
+        assertEquals(inventoryService.totalAvailableSeats, 100)
     }
 }

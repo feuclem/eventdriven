@@ -1,10 +1,15 @@
+import bus.Event
+import bus.Event.Companion.BOOKING_REQUESTED
+import bus.MessageBus
+
+
 class BookingService(
-    private val orchestratorService: OrchestratorService,
+    private val messageBus: MessageBus,
 ) {
 
-    fun book(numberOfSeats: Int): Boolean {
+    fun book(numberOfSeats: Int) {
         println("booking requested")
-        return orchestratorService.handle(numberOfSeats)
+        messageBus.send(message = Event(BOOKING_REQUESTED, numberOfSeats))
     }
 
 }
